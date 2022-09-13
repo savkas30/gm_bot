@@ -6,7 +6,7 @@ const bot = new TelegramApi(token, {polling:true});
 
 const isValidTime = () => {
     const Time = new Date();
-    return (Time.getHours() === 7 && Time.getMinutes() === 0);
+    return (Time.getHours() === 7 && Time.getMinutes() === 30);
 }
 const getGM = async (chatId) => {
     bot.sendMessage(chatId, "gm 🤍\n");
@@ -53,30 +53,24 @@ bot.on('message' , msg => {
     const text = msg.text;
     const chatId = msg.chat.id;
 
-    switch (text) {
-        case '/start':
-            getStart(chatId);
-            if (msg.from.id !== 423773370) bot.sendMessage(423773370, `--------------\n[${msg.from.username}] ${msg.text}`);
-            break;
-        case 'Compliment 💌':
-            getCompliment(chatId);
-            if (msg.from.id !== 423773370) bot.sendMessage(423773370, `--------------\n[${msg.from.username}] ${msg.text}`);
-            bot.deleteMessage(chatId,msg.message_id)
-            break;
-        case 'Advice 🎟':
-            getAdvice(chatId);
-            if (msg.from.id !== 423773370) bot.sendMessage(423773370, `--------------\n[${msg.from.username}] ${msg.text}`);
-            bot.deleteMessage(chatId,msg.message_id)
-            break;
-        default:
-            if (text.slice(-1) === '?') {
-                const answer = getAnswer();
-                if (msg.from.id !== 423773370) bot.sendMessage(423773370, `--------------\n[${msg.from.username}] ${msg.text}\n[bot] ${answer}`);
-                bot.sendMessage(chatId, answer);
-            } else {
-                if (msg.from.id !== 423773370) bot.sendMessage(423773370, `--------------\n[${msg.from.username}] ${msg.text}\n`)
-                bot.deleteMessage(chatId, msg.message_id);
-            }
+    if (text.slice(-1) === '?') {
+        const answer = getAnswer();
+        if (msg.from.id !== 423773370) bot.sendMessage(423773370, `--------------\n[${msg.from.username}] ${msg.text}\n[bot] ${answer}`);
+        bot.sendMessage(chatId, answer);
+    } else {
+        switch (text) {
+            case '/start':
+                getStart(chatId);
+                break;
+            case 'Compliment 💌':
+                getCompliment(chatId);
+                break;
+            case 'Advice 🎟':
+                getAdvice(chatId);
+                break;
+        }
+        if (msg.from.id !== 423773370) bot.sendMessage(423773370, `--------------\n[${msg.from.username}] ${msg.text}\n`)
+        bot.deleteMessage(chatId, msg.message_id);
     }
 })
 
